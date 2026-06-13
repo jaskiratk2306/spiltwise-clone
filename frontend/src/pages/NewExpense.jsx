@@ -31,9 +31,16 @@ const NewExpense = () => {
           setPaidBy(user.id);
           setSplits(m.map(member => ({ user_id: member.id, share_value: 0 })));
         } else if (friendId) {
-          const res = await api.get(`/users/search?email=`); // This is a bit lazy, should get friend info
-          // Mocking friend context for now
-          const m = [user, { id: friendId, name: 'Friend' }];
+          const res = await api.get(`/friends`);
+          const friend = res.data.find(f => f.id === friendId);
+          const m = [user, friend].filter(Boolean);
+          setMembers(m);
+          setPaidBy(user.id);
+          setSplits(m.map(member => ({ user_id: member.id, share_value: 0 })));
+        } else {
+          // No context - show all friends as possible members
+          const res = await api.get(`/friends`);
+          const m = [user, ...res.data];
           setMembers(m);
           setPaidBy(user.id);
           setSplits(m.map(member => ({ user_id: member.id, share_value: 0 })));

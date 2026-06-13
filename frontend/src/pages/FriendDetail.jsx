@@ -15,7 +15,7 @@ const FriendDetail = () => {
     const fetchFriendData = async () => {
       try {
         const [friendRes, expensesRes] = await Promise.all([
-          api.get(`/friends`), // This is a bit lazy, should have GET /friends/:id
+          api.get(`/friends`),
           api.get(`/expenses?friend_id=${id}`)
         ]);
         const f = friendRes.data.find(f => f.id === id);

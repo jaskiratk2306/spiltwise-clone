@@ -24,16 +24,26 @@ const Settle = () => {
           const res = await api.get(`/groups/${groupId}`);
           setMembers(res.data.members.map(m => m.user).filter(m => m.id !== user.id));
         } else if (friendId) {
-          // Mocking friend context
-          setMembers([{ id: friendId, name: 'Friend' }]);
-          setPaidTo(friendId);
+          const res = await api.get(`/friends`);
+          const friend = res.data.find(f => f.id === friendId);
+          if (friend) {
+            setMembers([friend]);
+            setPaidTo(String(friend.id));
+          }
         } else {
             // Fetch all people we owe from balances
             const res = await api.get('/balances');
             const uniquePeople = [];
+            const seen = new Set();
             res.data.forEach(b => {
-                if (b.user_id_from === user.id) uniquePeople.push(b.to_user);
-                if (b.user_id_to === user.id) uniquePeople.push(b.from_user);
+                if (b.user_id_from === user.id && b.to_user && !seen.has(b.to_user.id)) {
+                  uniquePeople.push(b.to_user);
+                  seen.add(b.to_user.id);
+                }
+                if (b.user_id_to === user.id && b.from_user && !seen.has(b.from_user.id)) {
+                  uniquePeople.push(b.from_user);
+                  seen.add(b.from_user.id);
+                }
             });
             setMembers(uniquePeople);
         }

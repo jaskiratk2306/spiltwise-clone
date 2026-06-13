@@ -10,6 +10,8 @@ import NewExpense from './pages/NewExpense';
 import Activity from './pages/Activity';
 import Settle from './pages/Settle';
 import Profile from './pages/Profile';
+import CreateGroup from './pages/CreateGroup';
+import AddFriend from './pages/AddFriend';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -28,7 +30,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/groups/new" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
             <Route path="/groups/:id" element={<ProtectedRoute><GroupDetail /></ProtectedRoute>} />
+            <Route path="/friends/new" element={<ProtectedRoute><AddFriend /></ProtectedRoute>} />
             <Route path="/friends/:id" element={<ProtectedRoute><FriendDetail /></ProtectedRoute>} />
             <Route path="/expenses/new" element={<ProtectedRoute><NewExpense /></ProtectedRoute>} />
             <Route path="/activity" element={<ProtectedRoute><Activity /></ProtectedRoute>} />

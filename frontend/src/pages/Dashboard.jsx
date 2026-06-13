@@ -58,7 +58,7 @@ const Dashboard = () => {
         <div className="card p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg text-gray-700">Groups</h3>
-            <button className="text-xs text-[#1cc29f] font-bold">+ add</button>
+            <Link to="/groups/new" className="text-xs text-[#1cc29f] font-bold hover:underline">+ add</Link>
           </div>
           <div className="space-y-4">
             {groups.length === 0 ? (
@@ -78,7 +78,7 @@ const Dashboard = () => {
         <div className="card p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg text-gray-700">Friends</h3>
-            <button className="text-xs text-[#1cc29f] font-bold">+ add</button>
+            <Link to="/friends/new" className="text-xs text-[#1cc29f] font-bold hover:underline">+ add</Link>
           </div>
           <div className="space-y-4">
             {friends.length === 0 ? (

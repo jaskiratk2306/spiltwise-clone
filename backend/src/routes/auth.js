@@ -22,6 +22,7 @@ const loginSchema = z.object({
 
 router.post('/register', async (req, res) => {
   try {
+    console.log('Register request:', req.body);
     const { name, email, password } = registerSchema.parse(req.body);
 
     const existingUser = await prisma.user.findFirst({
@@ -80,6 +81,7 @@ router.post('/register', async (req, res) => {
     const { password_hash: _, ...userWithoutPassword } = user;
     res.status(201).json(userWithoutPassword);
   } catch (error) {
+    console.error('Registration error:', error);
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: error.errors });
     }
