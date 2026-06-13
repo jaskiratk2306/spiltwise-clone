@@ -395,17 +395,18 @@ cd backend && npm test
 - [ ] Add `Procfile` or `package.json` start script: `node src/index.js`
 - [ ] Set env vars in Railway dashboard:
 - [ ] Set env vars in Render dashboard:
+### Platforms
+- **Database**: Vercel Postgres
+- **Backend**: Vercel (Functions)
+- **Frontend**: Vercel
+
+- [ ] Set env vars in Vercel dashboard:
   - `DATABASE_URL` (Supabase PostgreSQL)
   - `JWT_SECRET`
   - `EXCHANGE_RATE_API_KEY`
-  - `FRONTEND_URL` (Vercel URL for CORS)
+  - `VITE_API_URL` = Backend URL
   - `NODE_ENV=production`
-- [ ] Run `npx prisma migrate deploy` as part of Render build command
-- [ ] Copy Render backend URL
-
-#### Frontend → Vercel
-- [ ] Set env vars in Vercel dashboard:
-  - `VITE_API_URL` = Render backend URL
+- [ ] Run `npx prisma migrate deploy` as part of build
 - [ ] Vercel auto-deploys on push to `main`
 - [ ] Verify CORS works: frontend can login and load dashboard
 
