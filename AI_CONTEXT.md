@@ -324,9 +324,9 @@ All endpoints are REST (JSON over HTTP). Base path: `/api/v1`
 
 ## 16. Backend Architecture
 
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **ORM:** Prisma (with MySQL)
+- **Database**: PostgreSQL (via Supabase/Aiven) using Prisma ORM.
+- **Backend**: Node.js, Express.js.
+- **Frontend**: React (Vite), TailwindCSS v4.
 - **Auth:** JWT via `jsonwebtoken`, stored in httpOnly cookie via `cookie-parser`
 - **Password hashing:** bcrypt
 - **Validation:** Zod (request body validation)

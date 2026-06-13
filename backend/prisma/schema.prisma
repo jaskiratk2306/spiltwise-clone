@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SplitType {
+  EQUAL
+  EXACT
+  PERCENTAGE
+  SHARES
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String?
+  is_ghost      Boolean  @default(false)
+  base_currency String   @default("INR")
+  created_at    DateTime @default(now())
+
+  groups            GroupMember[]
+  friendships_as_1  Friendship[]  @relation("user1")
+  friendships_as_2  Friendship[]  @relation("user2")
+  expenses_paid     Expense[]     @relation("payer")
+  expenses_created  Expense[]     @relation("creator")
+  expense_splits    ExpenseSplit[]
+  settlements_paid  Settlement[]  @relation("settlement_payer")
+  settlements_recv  Settlement[]  @relation("settlement_receiver")
+  balances_from     Balance[]     @relation("balance_from")
+  balances_to       Balance[]     @relation("balance_to")
+
+  @@map("users")
+}
+
+model Group {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  base_currency String   @default("INR")
+  created_by    String
+  created_at    DateTime @default(now())
+
+  members     GroupMember[]
+  expenses    Expense[]
+  settlements Settlement[]
+  balances    Balance[]
+
+  @@map("groups")
+}
+
+model GroupMember {
+  group_id  String
+  user_id   String
+  joined_at DateTime @default(now())
+
+  group Group @relation(fields: [group_id], references: [id])
+  user  User  @relation(fields: [user_id], references: [id])
+
+  @@id([group_id, user_id])
+  @@map("group_members")
+}
+
+model Friendship {
+  id         String   @id @default(uuid())
+  user_id_1  String
+  user_id_2  String
+  created_at DateTime @default(now())
+
+  user1 User @relation("user1", fields: [user_id_1], references: [id])
+  user2 User @relation("user2", fields: [user_id_2], references: [id])
+
+  @@unique([user_id_1, user_id_2])
+  @@map("friendships")
+}
+
+model Expense {
+  id              String    @id @default(uuid())
+  group_id        String?
+  description     String
+  total_amount    Float
+  currency        String    @default("INR")
+  conversion_rate Float     @default(1)
+  paid_by         String
+  split_type      SplitType
+  created_by      String
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+
+  group   Group?         @relation(fields: [group_id], references: [id])
+  payer   User           @relation("payer", fields: [paid_by], references: [id])
+  creator User           @relation("creator", fields: [created_by], references: [id])
+  splits  ExpenseSplit[]
+
+  @@map("expenses")
+}
+
+model ExpenseSplit {
+  id          String   @id @default(uuid())
+  expense_id  String
+  user_id     String
+  owed_amount Float
+  share_value Float    @default(0)
+  created_at  DateTime @default(now())
+
+  expense Expense @relation(fields: [expense_id], references: [id])
+  user    User    @relation(fields: [user_id], references: [id])
+
+  @@map("expense_splits")
+}
+
+model Settlement {
+  id              String   @id @default(uuid())
+  group_id        String?
+  paid_by         String
+  paid_to         String
+  amount          Float
+  currency        String   @default("INR")
+  conversion_rate Float    @default(1)
+  created_at      DateTime @default(now())
+
+  group    Group?  @relation(fields: [group_id], references: [id])
+  payer    User    @relation("settlement_payer", fields: [paid_by], references: [id])
+  receiver User    @relation("settlement_receiver", fields: [paid_to], references: [id])
+
+  @@map("settlements")
+}
+
+model Balance {
+  id           String   @id @default(uuid())
+  group_id     String?
+  user_id_from String
+  user_id_to   String
+  net_amount   Float
+  updated_at   DateTime @updatedAt
+
+  group     Group?  @relation(fields: [group_id], references: [id])
+  from_user User    @relation("balance_from", fields: [user_id_from], references: [id])
+  to_user   User    @relation("balance_to", fields: [user_id_to], references: [id])
+
+  @@unique([group_id, user_id_from, user_id_to])
+  @@map("balances")
+}

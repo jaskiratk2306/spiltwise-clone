@@ -4,6 +4,7 @@ A full-stack expense splitting app built as a reverse-engineered Splitwise MVP, 
 
 **Live App:** `[INSERT VERCEL URL]`
 **Backend API:** `[INSERT RAILWAY URL]`
+**Deployment Guide:** [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 
 ---
 
