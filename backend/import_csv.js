@@ -253,7 +253,6 @@ ${anomalies.length > 0 ? anomalies.join('\n') : '- No anomalies detected!'}
 ---
 *End of Report*
 `;
-  fs.writeFileSync('C:/Users/Jaskirat/Desktop/import_report.md', reportContent);
   fs.writeFileSync('../import_report.md', reportContent);
   console.log('Import report generated at ../import_report.md');
 
