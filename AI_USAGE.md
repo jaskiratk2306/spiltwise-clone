@@ -1,4 +1,4 @@
-# PROMPTS.md — Key Prompts Used During Development
+# AI_USAGE.md — Key Prompts and AI Usage
 
 This file documents the key prompts used when working with Claude (Anthropic) to scope, design, and plan this project. These prompts can be reused to recreate a similar planning session.
 
@@ -133,3 +133,22 @@ Validate that split totals match before submitting.
 **Claude Sonnet 4.6** by Anthropic  
 Accessed via: [claude.ai](https://claude.ai)  
 Date of session: June 2026
+
+---
+
+## Cases Where AI Was Wrong
+
+1. **Incorrect Split Calculation for CSV**
+   - **What happened**: When generating the CSV parsing script (`import_csv.js`), the AI initially provided a straightforward substring split which failed on irregular CSV data (e.g. `Rohan 700` and `Aisha 30%` mixed together).
+   - **How it was caught**: Running the import script caused NaN owed amounts in the database.
+   - **Fix applied**: We completely rewrote the loop using a custom regex pattern (`/(.+?)\s+([\d.]+)%?/`) and explicit conditionals for PERCENTAGE versus SHARES instead of naive split logic.
+
+2. **Ghost User DB Constraints**
+   - **What happened**: The AI generated a Prisma schema for `users` with an empty password constraint, but Prisma nullable defaults crashed the auth middleware later.
+   - **How it was caught**: The backend threw a 500 error when trying to run `bcrypt.compare` against `null` values during standard login testing.
+   - **Fix applied**: We changed the code flow in `auth.js` to ensure login is instantly rejected for `is_ghost: true` users *before* attempting crypt operations.
+
+3. **Settlement Deduction Directionality**
+   - **What happened**: When writing the min-cash-flow algorithm, the AI erroneously deducted settlement values from the source's outgoing debt without balancing the target's net.
+   - **How it was caught**: Unit tests failed on the `Settlement reduces balance` edge case, showing an unclosed debt cycle.
+   - **Fix applied**: Modified `balanceService.js` to properly decrement `raw[paid_by][paid_to]` and check logic for negative overlap to correctly reverse directional edges in the memory map.

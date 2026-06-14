@@ -1,8 +1,20 @@
-# BUILD_PLAN.md — Splitwise Clone
+# DECISIONS.md — Splitwise Clone Options & Build Plan
 
-> Built from AI_CONTEXT.md. This plan is the execution order for the 3-day MVP.
-> Every task maps to a decision in AI_CONTEXT.md.
+> Built from SCOPE.md. This plan is the execution order for the 3-day MVP and logs decisions.
+> Every task maps to a decision in SCOPE.md.
 > Do not begin a day without completing the previous day's checklist.
+
+---
+
+## Decision Log
+
+| Decision | Options Considered | Why Selected |
+|---|---|---|
+| **Database Selection** | 1. MongoDB<br>2. PostgreSQL (Vercel) | **PostgreSQL (Vercel)** was chosen because relational data models fit expense tracking strictly, and Vercel Postgres integrates cleanly with our Prisma stack. |
+| **Auth Strategy** | 1. NextAuth / OAuth<br>2. Email/Pass + JWT in HttpOnly Cookiess | **JWT via HttpOnly Cookie** was chosen to avoid full OAuth setups while mitigating XSS risks common with localStorage tokens. |
+| **Balance Tracking** | 1. Compute on the fly<br>2. Precomputed Balance Table with Min-Cash-Flow | **Precomputed Balance Table** prevents high latency on dashboard load up, especially important once groups acquire vast arrays of expenses. |
+| **Handling Unregistered Users** | 1. Require registration before adding.<br>2. Allow Ghost Users to be merged upon join. | **Ghost Users** provide frictionless expense additions, avoiding UI blockage while on trips. |
+| **Data Parsing (CSV)** | 1. Strict typed CSV reader<br>2. Regex-based fuzzy matching | **Regex-based fuzzy matching** chosen to parse complex, poorly formatted "amount/user" structures typical in unformatted data dumps. |
 
 ---
 
@@ -424,9 +436,9 @@ cd backend && npm test
 ### Block 3G — Submission Files (30 min)
 
 - [ ] `README.md` — setup instructions, env vars, AI disclosure
-- [ ] `PROMPTS.md` — key prompts used
-- [ ] `BUILD_PLAN.md` — this file (already done)
-- [ ] `AI_CONTEXT.md` — source of truth (already done)
+- [ ] `AI_USAGE.md` — key prompts used
+- [ ] `DECISIONS.md` — this file (already done)
+- [ ] `SCOPE.md` — source of truth (already done)
 - [ ] Push all to GitHub (public repo)
 - [ ] Submit: GitHub URL + Vercel deployed URL
 

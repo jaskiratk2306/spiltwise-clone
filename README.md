@@ -14,11 +14,11 @@ This project was scoped, designed, and planned with the assistance of **Claude (
 
 The AI was used for:
 - Interviewing and eliciting product requirements (no assumptions made without answers)
-- Producing `AI_CONTEXT.md` as a living source of truth
-- Producing `BUILD_PLAN.md` as a task-ordered execution plan
+- Producing `SCOPE.md` as a living source of truth
+- Producing `DECISIONS.md` as a task-ordered execution plan and decision log
 - Answering architecture questions and tradeoffs
 
-All implementation was guided by `AI_CONTEXT.md`. See `PROMPTS.md` for key prompts used.
+All implementation was guided by `SCOPE.md`. See `AI_USAGE.md` for key prompts used.
 
 ---
 
@@ -58,10 +58,10 @@ splitwise-clone/
 │   ├── prisma/
 │   │   └── schema.prisma
 │   └── .env.example
-├── AI_CONTEXT.md      # Source of truth
-├── BUILD_PLAN.md      # Day-by-day build plan
+├── SCOPE.md           # Anomaly log and database schema
+├── DECISIONS.md       # Decision log
 ├── README.md          # This file
-└── PROMPTS.md         # Key prompts used
+└── AI_USAGE.md        # AI usage and key prompts used
 ```
 
 ---
@@ -215,7 +215,7 @@ Key routes:
 - `GET /api/v1/balances`
 - `GET /api/v1/activity`
 
-See `AI_CONTEXT.md §14` for the full API reference.
+See `SCOPE.md §14` for the full API reference.
 
 ---
 

@@ -1,4 +1,4 @@
-# AI_CONTEXT.md — Splitwise Clone: Source of Truth
+# SCOPE.md — Splitwise Clone: Scope, Schema & Source of Truth
 
 > This file is the single source of truth for the entire project.
 > All implementation decisions must trace back to this document.
@@ -419,19 +419,33 @@ The following deliverables must be produced and submitted:
 | 1 | **Public deployed app URL** | Frontend on Vercel, Backend on Railway/Render |
 | 2 | **GitHub repository** | Single public repo (monorepo: `/frontend` + `/backend`) |
 | 3 | **README.md** | Setup instructions, env vars, how to run locally, AI tool used |
-| 4 | **BUILD_PLAN.md** | Day-by-day build plan, task order, layer breakdown |
-| 5 | **AI_CONTEXT.md** | This file — source of truth for the entire project |
-| 6 | **Key prompts used** | Saved as `PROMPTS.md` in repo root |
+| 4 | **DECISIONS.md** | Decision log and Day-by-day build plan |
+| 5 | **SCOPE.md** | This file — anomaly log, database schema, and source of truth for the entire project |
+| 6 | **AI_USAGE.md** | Key prompts used and cases where AI was wrong |
 
 ### Repo Structure
 ```
 splitwise-clone/
 ├── frontend/          # React + Vite + TailwindCSS
 ├── backend/           # Node.js + Express + Prisma
-├── AI_CONTEXT.md      # Source of truth
-├── BUILD_PLAN.md      # Day-by-day plan
+├── SCOPE.md           # Anomaly log and database schema
+├── DECISIONS.md       # Decision log
 ├── README.md          # Setup + AI disclosure
-└── PROMPTS.md         # Key prompts used during development
+└── AI_USAGE.md        # Key prompts and AI usage details
 ```
 
 *Last updated: submission requirements added.*
+
+---
+
+## 23. Anomaly Log (CSV Data Handling)
+
+> This section details the data anomalies encountered when importing the provided CSV into our database schema, and the exact steps taken to resolve them.
+
+| Issue Detected | Description / Why it was a problem | How we resolved it |
+|---|---|---|
+| **Empty or Missing Fields** | Some CSV rows lacked `amount`, `paid_by`, or `currency`. | Skipped rows without `amount` or `paid_by`. Fallback to 'INR' for missing currency. |
+| **Inconsistent Case in Names** | Users entered names like "priya" vs "Priya", leading to duplicate accounts. | Standardized normalization internally where needed or mapped varying cases manually. |
+| **Settlement Identification** | Settlements did not have a clear type, only an empty `split_type` and target in `split_with`. | Inferred blank `split_type` as a Settlement, extracting `paid_to` from `split_with`. |
+| **Malformed Split Shares** | Complex strings in `split_details` (e.g., "Rohan 700", "Aisha 30%"). | Used Regex parsing (`/(.+?)\s+([\d.]+)%?/`) to extract user names and numbers dynamically. |
+| **Calculated Share Rounding** | Custom split fractions didn't perfectly match the total amount. | Calculated fractional shares and normalized up to the total in our script logic. |
