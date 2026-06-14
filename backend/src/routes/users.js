@@ -14,11 +14,8 @@ router.get('/search', authenticate, async (req, res) => {
 
     const users = await prisma.user.findMany({
       where: {
-        email: { contains: email },
-        OR: [
-          { is_ghost: false },
-          { email: email } // Show ghost if it matches exactly
-        ]
+        email: { contains: email, mode: 'insensitive' },
+        is_ghost: false
       },
       take: 10,
       select: {
