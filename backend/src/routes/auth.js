@@ -65,6 +65,20 @@ router.post('/register', async (req, res) => {
       });
     }
 
+    // Automatically add user to Imported Expenses group
+    const importedGroup = await prisma.group.findFirst({
+      where: { name: 'Imported Expenses' }
+    });
+    if (importedGroup && user) {
+      try {
+        await prisma.groupMember.create({
+          data: { group_id: importedGroup.id, user_id: user.id }
+        });
+      } catch (e) {
+        // Ignore unique constraint error if already in group
+      }
+    }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET,
@@ -105,6 +119,20 @@ router.post('/login', async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Automatically add user to Imported Expenses group
+    const importedGroup = await prisma.group.findFirst({
+      where: { name: 'Imported Expenses' }
+    });
+    if (importedGroup && user) {
+      try {
+        await prisma.groupMember.create({
+          data: { group_id: importedGroup.id, user_id: user.id }
+        });
+      } catch (e) {
+        // Ignore unique constraint error if already in group
+      }
     }
 
     const token = jwt.sign(

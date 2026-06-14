@@ -2,26 +2,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  --primary: #1cc29f;
-  --primary-dark: #16a085;
-  --primary-glow: rgba(28, 194, 159, 0.25);
-  --primary-subtle: rgba(28, 194, 159, 0.1);
-  --secondary: #ff652f;
-  --secondary-glow: rgba(255, 101, 47, 0.25);
-  --secondary-subtle: rgba(255, 101, 47, 0.1);
-  --accent: #6c63ff;
-  --bg-base: #0d1117;
-  --bg-surface: #161b22;
-  --bg-elevated: #1c2128;
-  --bg-hover: #21262d;
-  --border: rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.15);
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-muted: #484f58;
-  --green: #1cc29f;
-  --red: #f85149;
-  --yellow: #e3b341;
+  --primary: #00e5ff; /* Vibrant Cyan */
+  --primary-dark: #0088ff; /* Deep Blue */
+  --primary-glow: rgba(0, 229, 255, 0.35);
+  --primary-subtle: rgba(0, 229, 255, 0.15);
+  
+  --secondary: #ff0080; /* Shocking Pink */
+  --secondary-glow: rgba(255, 0, 128, 0.35);
+  --secondary-subtle: rgba(255, 0, 128, 0.15);
+  
+  --accent: #7928ca; /* Amethyst / Deep Purple */
+  
+  --bg-base: #050505; /* Premium Deep Black */
+  --bg-surface: #111111;
+  --bg-elevated: #18181b;
+  --bg-hover: #27272a;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #52525b;
+  
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #f59e0b;
 }
 
 * {
