@@ -12,11 +12,32 @@ import Settle from './pages/Settle';
 import Profile from './pages/Profile';
 import CreateGroup from './pages/CreateGroup';
 import AddFriend from './pages/AddFriend';
-import './App.css';
+
+const LoadingScreen = () => (
+  <div style={{
+    minHeight: '100vh',
+    background: 'var(--bg-base)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: 16,
+  }}>
+    <div style={{
+      width: 48, height: 48, borderRadius: 12,
+      background: 'linear-gradient(135deg, var(--primary) 0%, #16a085 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: 24, fontWeight: 800, color: '#fff',
+      boxShadow: '0 0 24px var(--primary-glow)',
+      animation: 'pulse 1.5s ease-in-out infinite',
+    }}>S</div>
+    <style>{`@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.7;transform:scale(0.95)} }`}</style>
+  </div>
+);
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/login" />;
   return children;
 };
@@ -25,7 +46,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+        <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
